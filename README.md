@@ -1,0 +1,2 @@
+# nsm
+npm snippet manager
