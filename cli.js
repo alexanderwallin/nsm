@@ -3,8 +3,13 @@
 require('isomorphic-fetch')
 const fs = require('fs')
 const path = require('path')
+const minimist = require('minimist')
 const inquirer = require('inquirer')
 const RegClient = require('npm-registry-client')
+
+const version = require('./package.json').version
+
+const args = minimist(process.argv.slice(2))
 
 const noop = () => {}
 const logger = {
@@ -30,7 +35,6 @@ async function getPackageGitInfo(packageName) {
       if (err) {
         return reject(err)
       }
-
       const repoSshUrl = results.repository.url
       const [, owner, repo] = repoSshUrl.split(/github\.com\/([^/]+)\/([^.]+)\.git$/)
       resolve({ owner, repo })
@@ -113,6 +117,18 @@ async function run() {
   await fs.writeFileSync(destination, fileContent)
 
   console.log(`Wrote ${fileContent.length} bytes worth of juicy JavaScript to ${destination}. Enjoy!`)
+
+  // Write to snippets list in package.json
+  if (args.save) {
+    const packageJsonPath = path.join(process.cwd(), 'package.json')
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+    if (packageJson.snippets === undefined) {
+      packageJson.snippets = {}
+    }
+
+    packageJson.snippets[`${owner}/${repo}:${file}`] = destination
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  }
 }
 
 run()

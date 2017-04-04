@@ -10,6 +10,7 @@
   "dependencies": {
     "inquirer": "^3.0.6",
     "isomorphic-fetch": "^2.2.1",
+    "minimist": "^1.2.0",
     "npm-registry-client": "^8.1.0"
   },
   "devDependencies": {},
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/alexanderwallin/nsm/issues"
   },
-  "homepage": "https://github.com/alexanderwallin/nsm#readme"
+  "homepage": "https://github.com/alexanderwallin/nsm#readme",
+  "snippets": {
+    "reactjs/redux:examples/async/src/actions/index.js": "./wow.js"
+  }
 }
