@@ -1,7 +1,7 @@
 {
   "name": "nsm-cli",
   "version": "0.2.0",
-  "description": "The copy-paste version of the npm CLI",
+  "description": "npm snippet manager - The copy-paste version of the npm CLI",
   "bin": "cli.js",
   "main": "cli.js",
   "engines": {
