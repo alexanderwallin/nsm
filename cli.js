@@ -11,6 +11,12 @@ const version = require('./package.json').version
 
 const args = minimist(process.argv.slice(2))
 
+// Print help
+if (args.help === true || args.h === true) {
+  printHelp()
+  process.exit()
+}
+
 const noop = () => {}
 const logger = {
   error: noop,
@@ -23,6 +29,13 @@ const logger = {
 }
 
 const npmClient = new RegClient({ log: logger })
+
+function printHelp() {
+  console.log(`
+  Usage:
+    nsm [--save] [package] [source] [destination]
+  `)
+}
 
 async function getPackageGitInfo(packageName) {
   return new Promise((resolve, reject) => {
