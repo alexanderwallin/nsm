@@ -83,37 +83,52 @@ async function writeContentsToFile(destination, contents) {
 }
 
 async function run() {
-  const { packageName } = await inquirer.prompt([
-    {
-      name: 'packageName',
-      type: 'input',
-      message: 'What package do you want to copy from?',
-    },
-  ])
+  let [packageName, source, destination] = args._
+
+  // Package name -> owner/repo
+  if (packageName === undefined) {
+    const packageNameInput = await inquirer.prompt([
+      {
+        name: 'packageName',
+        type: 'input',
+        message: 'What package do you want to copy from?',
+      },
+    ])
+    packageName = packageNameInput.packageName
+  }
 
   const { owner, repo } = await getPackageGitInfo(packageName)
   const repoFiles = await getFilesInRepo(owner, repo)
   const jsFiles = repoFiles.filter(file => /\.js$/.test(file.path)).map(file => file.path)
 
-  const { file } = await inquirer.prompt([
-    {
-      name: 'file',
-      type: 'list',
-      message: 'Which file do you want to copy?',
-      choices: jsFiles,
-    },
-  ])
+  // Source
+  if (source === undefined) {
+    const sourceInput = await inquirer.prompt([
+      {
+        name: 'source',
+        type: 'list',
+        message: 'Which file do you want to copy?',
+        choices: jsFiles,
+      },
+    ])
+    source = sourceInput.source
+  }
 
-  const fileContent = await getFileContentInRepo(owner, repo, file)
+  const fileContent = await getFileContentInRepo(owner, repo, source)
 
-  const { destination } = await inquirer.prompt([
-    {
-      name: 'destination',
-      type: 'input',
-      message: 'Where do you want to copy the contents?',
-      default: path.basename(file),
-    }
-  ])
+  // Destination
+  if (destination === undefined) {
+    const destinationInput = await inquirer.prompt([
+      {
+        name: 'destination',
+        type: 'input',
+        message: 'Where do you want to copy the contents?',
+        default: path.basename(source),
+      }
+    ])
+    destination = destinationInput.destination
+  }
+
   await fs.writeFileSync(destination, fileContent)
 
   console.log(`Wrote ${fileContent.length} bytes worth of juicy JavaScript to ${destination}. Enjoy!`)
@@ -126,7 +141,7 @@ async function run() {
       packageJson.snippets = {}
     }
 
-    packageJson.snippets[`${owner}/${repo}:${file}`] = destination
+    packageJson.snippets[`${owner}/${repo}:${source}`] = destination
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   }
 }
