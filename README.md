@@ -24,7 +24,7 @@ If the `--save` option is specified (at the end), A reference will be stored in 
 nsm copy [package] [source] [destination] [--save]
 ```
 
-### `summon`
+### `summon`
 
 Downloads all files listed in the `snippets` collection in package.json and writes them to their defined destinations.
 
