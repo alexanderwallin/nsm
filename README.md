@@ -6,6 +6,16 @@
 
 ![nsm in action](nsm-in-action.gif)
 
+## Why though?
+
+Here are a couple of loose ideas on its use cases:
+
+* You know of an implementation in a library's examples that you always want to steal
+* You want a centralized documentation on where code has been copy-pasted from
+* You wish to be dependency free (well, officially, since copying code in this manner is kind of a dependency)
+* You don't really feel like installing a dependency that is a one-liner
+* You want to save random useful and reusable files in a library somewhere and easily copy them over without using Yeoman et al
+
 ## Installation
 
 ```sh
