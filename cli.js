@@ -39,6 +39,10 @@ function run() {
   else if (command === 'summon') {
     summon()
   }
+  else if (command === 'help') {
+    printHelp()
+    process.exit(0)
+  }
   else {
     console.log(`\n  ${command} ain't no command of ours.\n`)
     printHelp()
@@ -51,6 +55,7 @@ function printHelp() {
   Usage:
     nsm copy [package] [source] [destination] [--save]
     nsm summon
+    nsm help
   `)
 }
 

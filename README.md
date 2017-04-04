@@ -12,6 +12,17 @@
 npm install -g nsm-cli
 ```
 
+## Usage
+
+```sh
+$ nsm help
+
+  Usage:
+    nsm copy [package] [source] [destination] [--save]
+    nsm summon
+    nsm help
+```
+
 ## Commands
 
 ### `copy`
