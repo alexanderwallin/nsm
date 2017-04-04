@@ -30,10 +30,27 @@ const logger = {
 
 const npmClient = new RegClient({ log: logger })
 
+function run() {
+  const [command, ...options] = args._
+
+  if (command === 'copy') {
+    copy(options)
+  }
+  else if (command === 'summon') {
+    summon()
+  }
+  else {
+    console.log(`\n  ${command} ain't no command of ours.\n`)
+    printHelp()
+    process.exit(0)
+  }
+}
+
 function printHelp() {
   console.log(`
   Usage:
-    nsm [--save] [package] [source] [destination]
+    nsm copy [package] [source] [destination] [--save]
+    nsm summon
   `)
 }
 
@@ -95,8 +112,13 @@ async function writeContentsToFile(destination, contents) {
   })
 }
 
-async function run() {
-  let [packageName, source, destination] = args._
+/**
+ * Copies a file from a package's repo and writes it to a given
+ * destination, optionally saving a reference to this action into
+ * package.json
+ */
+async function copy(options) {
+  let [packageName, source, destination] = options
 
   // Package name -> owner/repo
   if (packageName === undefined) {
@@ -157,6 +179,30 @@ async function run() {
     packageJson.snippets[`${owner}/${repo}:${source}`] = destination
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   }
+}
+
+/**
+ * Reads saved snippets from package.json and downloads them all 
+ * into their defined destinations.
+ */
+async function summon() {
+  const packageJsonPath = path.join(process.cwd(), 'package.json')
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+
+  const snippets = packageJson.snippets || {}
+  const sources = Object.keys(snippets)
+
+  console.log('Summoning snippets...\n')
+
+  for (let i = 0; i < sources.length; i++) {
+    const [, owner, repo, source] = sources[i].split(/^([^/]+)\/([^:]+):(.+)$/)
+    const destination = snippets[sources[i]]
+    const fileContent = await getFileContentInRepo(owner, repo, source)
+    await fs.writeFileSync(destination, fileContent)
+    console.log(`...copied ${source} from ${owner}/${repo} to ${destination}.`)
+  }
+
+  console.log('\nDone!')
 }
 
 run()

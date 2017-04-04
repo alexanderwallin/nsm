@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/alexanderwallin/nsm#readme",
   "snippets": {
-    "reactjs/redux:examples/async/src/actions/index.js": "./wow.js"
+    "reactjs/redux:examples/async/src/actions/index.js": "./wow.js",
+    "alexanderwallin/node-gettext:Gruntfile.js": "Gruntfile.js"
   }
 }
