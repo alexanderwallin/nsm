@@ -2,7 +2,9 @@
   "name": "nsm-cli",
   "version": "0.2.0",
   "description": "npm snippet manager - The copy-paste version of the npm CLI",
-  "bin": "cli.js",
+  "bin": {
+    "nsm": "cli.js"
+  },
   "main": "cli.js",
   "engines": {
     "node": ">= 7.6.0"
