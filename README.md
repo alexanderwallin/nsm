@@ -29,7 +29,7 @@ $ nsm help
 
 Copies a file from a package's repo and writes it to a given destination. Omitted arguments are queried using prompts.
 
-If the `--save` option is specified (at the end), A reference will be stored in a `snippets` collection in package.json.
+If the `--save` option is specified (at the end), a reference will be stored in a `snippets` collection in package.json.
 
 ```sh
 nsm copy [package] [source] [destination] [--save]
